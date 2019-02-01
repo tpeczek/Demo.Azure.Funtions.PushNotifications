@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.Azure.Funtions.PushNotifications", "Demo.Azure.Funtions.PushNotifications\Demo.Azure.Funtions.PushNotifications.csproj", "{F0C99AA4-0034-4331-87BC-95F5FDD7C193}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.WebJobs.Extensions.CosmosDB.Extensions", "Demo.WebJobs.Extensions.CosmosDB.Extensions\Demo.WebJobs.Extensions.CosmosDB.Extensions.csproj", "{5B407066-BCE2-40CB-AB56-A430C3E198CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.WebJobs.Extensions.CosmosDB.Extensions", "Demo.WebJobs.Extensions.CosmosDB.Extensions\Demo.WebJobs.Extensions.CosmosDB.Extensions.csproj", "{5B407066-BCE2-40CB-AB56-A430C3E198CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
