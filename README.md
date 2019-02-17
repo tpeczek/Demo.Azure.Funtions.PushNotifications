@@ -2,7 +2,7 @@
 
 Sample project for demonstrating Push Notifications based on Push API and Web Push Protocol in Azure Functions:
 
-- []()
+- [Scaling Web Push Notifications with Azure Functions](https://www.tpeczek.com/2019/02/scaling-web-push-notifications-with.html)
 
 ## Donating
 

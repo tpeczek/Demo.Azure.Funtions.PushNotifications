@@ -5,7 +5,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.Documents.Linq;
 using Microsoft.Azure.Documents.Client;
 using Lib.Net.Http.WebPush;
-using Lib.Net.Http.WebPush.Authentication;
 using Lib.Azure.WebJobs.Extensions.WebPush.Bindings;
 
 namespace Demo.Azure.Funtions.PushNotifications
