@@ -1,16 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AzureFunctionsVersion>v2</AzureFunctionsVersion>
+    <TargetFramework>net8.0</TargetFramework>
+    <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+    <RootNamespace>Demo.Azure.Funtions.PushNotifications</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Lib.Azure.WebJobs.Extensions.WebPush" Version="1.0.0" />
-    <PackageReference Include="Lib.Net.Http.WebPush" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.CosmosDB" Version="3.0.1" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.24" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Demo.WebJobs.Extensions.CosmosDB.Extensions\Demo.WebJobs.Extensions.CosmosDB.Extensions.csproj" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.4.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.CosmosDB" Version="4.8.0" />
+    <PackageReference Include="Lib.Net.Http.WebPush" Version="3.2.1" />
+    <PackageReference Include="Lib.Azure.WebJobs.Extensions.WebPush" Version="1.4.1" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
