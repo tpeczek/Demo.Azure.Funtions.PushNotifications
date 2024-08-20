@@ -1,29 +1,37 @@
-using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.Documents.Linq;
-using Microsoft.Azure.Documents.Client;
 using Lib.Net.Http.WebPush;
 using Lib.Azure.WebJobs.Extensions.WebPush.Bindings;
 
+
 namespace Demo.Azure.Funtions.PushNotifications
 {
+    public class Notification
+    {
+        public string Topic { get; set; }
+
+        public string Content {  get; set; }
+
+        public int? TimeToLive { get; set; }
+
+        public PushMessageUrgency Urgency { get; set; }
+    }
+
     public static class SendNotificationFunction
     {
-        private static readonly Uri _subscriptionsCollectionUri = UriFactory.CreateDocumentCollectionUri("PushNotifications", "SubscriptionsCollection");
-
         [FunctionName("SendNotification")]
         public static async Task Run([CosmosDBTrigger(
             databaseName: "PushNotifications",
-            collectionName: "NotificationsCollection",
-            ConnectionStringSetting = "CosmosDBConnection",
-            LeaseCollectionName = "NotificationsLeaseCollection",
-            CreateLeaseCollectionIfNotExists = true)]IReadOnlyList<PushMessage> notifications,
+            containerName: "Notifications",
+            Connection = "CosmosDBConnection",
+            LeaseContainerName = "NotificationsLeaseCollection",
+            CreateLeaseContainerIfNotExists = true)]IReadOnlyList<Notification> notifications,
             [CosmosDB(
             databaseName: "PushNotifications",
-            collectionName: "SubscriptionsCollection",
-            ConnectionStringSetting = "CosmosDBConnection")]DocumentClient cosmosDbClient,
+            containerName: "Subscriptions",
+            Connection = "CosmosDBConnection")]CosmosClient cosmosClient,
             [PushService(
             PublicKeySetting = "ApplicationServerPublicKey",
             PrivateKeySetting = "ApplicationServerPrivateKey",
@@ -31,20 +39,23 @@ namespace Demo.Azure.Funtions.PushNotifications
         {
             if (notifications != null)
             {
-                IDocumentQuery<PushSubscription> subscriptionQuery = cosmosDbClient.CreateDocumentQuery<PushSubscription>(_subscriptionsCollectionUri, new FeedOptions
+                Container subscriptionsContainer = cosmosClient.GetDatabase("PushNotifications").GetContainer("Subscriptions");
+                using (FeedIterator<PushSubscription> subscriptionsIterator = subscriptionsContainer.GetItemQueryIterator<PushSubscription>())
                 {
-                    EnableCrossPartitionQuery = true,
-                    MaxItemCount = -1
-                }).AsDocumentQuery();
-
-                while (subscriptionQuery.HasMoreResults)
-                {
-                    foreach (PushSubscription subscription in await subscriptionQuery.ExecuteNextAsync())
+                    while (subscriptionsIterator.HasMoreResults)
                     {
-                        foreach (PushMessage notification in notifications)
+                        foreach (PushSubscription subscription in await subscriptionsIterator.ReadNextAsync())
                         {
-                            // Fire-and-forget
-                            pushServiceClient.RequestPushMessageDeliveryAsync(subscription, notification);
+                            foreach (Notification notification in notifications)
+                            {
+                                // Fire-and-forget
+                                pushServiceClient.RequestPushMessageDeliveryAsync(subscription, new PushMessage(notification.Content)
+                                {
+                                    Topic = notification.Topic,
+                                    TimeToLive = notification.TimeToLive,
+                                    Urgency = notification.Urgency
+                                });
+                            }
                         }
                     }
                 }
